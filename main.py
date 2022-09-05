@@ -22,6 +22,14 @@ def download(link): #taken from my older project
                 sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50-done)) )    
                 sys.stdout.flush()
 
+# Terms of service agreement
+tos = input("\nWith pressing ENTER you agree with Android SDK Platform-Tools terms of service. (anything else = no)\n")
+if tos == "":
+    pass
+else:
+    exit()
+ 
+
 if (os.name == "nt"): #Windows code
     download("https://dl.google.com/android/repository/platform-tools-latest-windows.zip")
     print("\nUnzipping...")
