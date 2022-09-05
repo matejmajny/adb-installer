@@ -1,9 +1,6 @@
+from posixpath import expanduser
 import requests, os, zipfile, sys, time
 
-if os.name != "nt":
-    print("Different OS than Windows is not supported yet!")
-    time.sleep(2)
-    exit()
 
 def download(link): #taken from my older project
     with open("platform-tools.zip", "wb") as f:
@@ -23,13 +20,30 @@ def download(link): #taken from my older project
                 sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50-done)) )    
                 sys.stdout.flush()
 
-download("https://dl.google.com/android/repository/platform-tools-latest-windows.zip")
+if (os.name == "nt"):
+    download("https://dl.google.com/android/repository/platform-tools-latest-windows.zip")
+    print("\nUnzipping...")
+    with zipfile.ZipFile("platform-tools.zip", 'r') as zip_ref:
+        zip_ref.extractall("C:\\")
 
-print("\nUnzipping...")
-with zipfile.ZipFile("platform-tools.zip", 'r') as zip_ref:
-    zip_ref.extractall("C:\\")
-
-print("Deleting zip and adding platform-tools to path...")
-os.remove("platform-tools.zip")
-os.system('set Path=%Path%;C:\\platform-tools')
-print("\nSuccesful! Now you can open cmd anywhere and use adb/fastboot commands.")
+    print("Deleting zip and adding platform-tools to path...")
+    os.remove("platform-tools.zip")
+    os.system('set Path=%Path%;C:\\platform-tools')
+    print("\nSuccessful! Now you can open cmd anywhere and use adb/fastboot commands.")
+elif (os.name == "posix"):
+    download("https://dl.google.com/android/repository/platform-tools-latest-linux.zip")
+    print("\nUnzipping...")
+    with zipfile.ZipFile("platform-tools.zip", 'r') as zip_ref:
+        zip_ref.extractall(expanduser("~"))
+    print("Deleting zip and adding platform-tools to path...")
+    os.remove("platform-tools.zip")
+    # add to path
+    os.system('export PATH=$PATH:~/platform-tools')
+    # add to bashrc
+    with open(expanduser("~") + "/.bashrc", "a") as f:
+        f.write("\nexport PATH=$PATH:~/platform-tools")
+        f.close()
+    os.system('chmod +x ~/platform-tools/*')
+    os.system('source ~/.bashrc')
+    
+    print("\nSuccessfull! Now you can open terminal anywhere and use adb/fastboot commands.")
