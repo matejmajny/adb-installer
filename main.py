@@ -43,11 +43,14 @@ elif (os.name == "posix"):
     shell = os.readlink('/proc/%d/exe' % os.getppid())
     if (shell.endswith("bash")):
         os.system('echo "export PATH=$PATH:~/platform-tools" >> ~/.bashrc')
+        os.system('source ~/.bashrc')
     elif (shell.endswith("zsh")):
         os.system('echo "export PATH=$PATH:~/platform-tools" >> ~/.zshrc')
+        os.system('source ~/.zshrc')
     elif (shell.endswith("fish")):
         os.system('echo "export PATH=$PATH:~/platform-tools" >> ~/.config/fish/config.fish')
+        os.system('source ~/.config/fish/config.fish')
     os.system('chmod +x ~/platform-tools/*')
-    os.system('source ~/.bashrc')
+    
     
     print("\nSuccessful! Now you can open terminal anywhere and use adb/fastboot commands.")
