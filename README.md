@@ -5,3 +5,6 @@
 - Windows 8.1+
 - Requests library (only for .py file)
 - Internet (ofc how would you read this)
+# Linux version
+- created by @dumpydev (he loves pull requests)
+- use py file from releases (v2.0+)
