@@ -1,6 +1,6 @@
 from posixpath import expanduser
 import requests, os, zipfile, sys, time
-print("Android Platform Tools Installer v2.0")
+print("Android Platform Tools Installer v3.0")
 print("By: @matejmajny and @dumpydev")
 print("OS: " + sys.platform)
 
@@ -33,6 +33,7 @@ if (os.name == "nt"): #Windows code
     os.system('set Path=%Path%;C:\\platform-tools')
     print("All done! You can now use adb/fastboot commands anywhere!")  
 elif (os.name == "posix"): # Linux code (by dumpy)
+    path = "$PATH"
     logoutrequired = False
     download("https://dl.google.com/android/repository/platform-tools-latest-linux.zip")
     print("\nUnzipping...")
@@ -44,20 +45,35 @@ elif (os.name == "posix"): # Linux code (by dumpy)
         shell = os.readlink('/proc/%d/exe' % os.getppid())
         print("Detected Shell: " + shell[shell.rfind('/')+1:])
         if (shell.endswith("bash")):
-            print("Adding to bashrc...")
-            os.system(r'echo "export PATH=$PATH:~/platform-tools" >> ~/.bashrc')
-            os.system(r'source ~/.bashrc')
-            print("Done!")
+            with open(expanduser("~") + "/.bashrc", "r") as f:
+                # Check if already added
+                if (f.read().find("platform-tools") == -1):
+                    with open(expanduser("~") + "/.bashrc", "a") as f:
+                        f.write("export PATH=$PATH:~/platform-tools")
+                    os.system(r'source ~/.bashrc')
+                    print("Done!")
+                else:
+                    print("Already added!")
         elif (shell.endswith("zsh")):
-            print("Adding to zshrc...")
-            os.system(r'echo "export PATH=$PATH:~/platform-tools" >> ~/.zshrc')
-            os.system(r'source ~/.zshrc')
-            print("Done!")
+            with open(expanduser("~") + "/.zshrc", "r") as f:
+                # Check if already added
+                if (f.read().find("platform-tools") == -1):
+                    print("Adding to zshrc...")
+                    with open(expanduser("~") + "/.zshrc", "a") as f:
+                        f.write(r'export PATH:$PATH:~/platform-tools')
+                    os.system(r'source ~/.zshrc')
+                    print("Done!")
+                else:
+                    print("Already added!")
         elif (shell.endswith("fish")):
-            print("Adding to config.fish...")
-            os.system(r'echo "export PATH=$PATH:~/platform-tools" >> ~/.config/fish/config.fish')
-            os.system(r'source ~/.config/fish/config.fish')
-            print("Done!")
+            if (f.read().find("platform-tools") == -1):
+                    print("Adding to config.fish...")
+                    with open(expanduser("~") + "/.config/fish/config.fish", "a") as f:
+                        f.write("set PATH $PATH ~/platform-tools")
+                    os.system(r'source ~/.config/fish/config.fish')
+                    print("Done!")
+            else:
+                print("Already added!")
         print("Adding executeable permissions...")
         os.system(r'chmod +x ~/platform-tools/*')
         print("Done!")
