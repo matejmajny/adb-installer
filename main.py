@@ -2,7 +2,7 @@ from posixpath import expanduser
 import requests, os, zipfile, sys, time
 print("Android Platform Tools Installer v2.2")
 print("By: @matejmajny and @dumpydev")
-print("OS: " + sys.platform)
+print("OS: " + sys.platform + "/" + os.name)
 
 def download(link): #taken from my older project
     with open("platform-tools.zip", "wb") as f:
