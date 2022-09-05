@@ -1,6 +1,6 @@
 from posixpath import expanduser
 import requests, os, zipfile, sys, time
-print("Android Platform Tools Installer v3.0")
+print("Android Platform Tools Installer v2.2")
 print("By: @matejmajny and @dumpydev")
 print("OS: " + sys.platform)
 
@@ -32,7 +32,9 @@ if (os.name == "nt"): #Windows code
     os.remove("platform-tools.zip")
     os.system('set Path=%Path%;C:\\platform-tools')
     print("All done! You can now use adb/fastboot commands anywhere!")  
-elif (os.name == "posix"): # Linux code (by dumpy)
+
+    
+elif (os.name == "posix"): # Linux code (by dumpy), and ngl why is linux so complicated
     path = "$PATH"
     logoutrequired = False
     download("https://dl.google.com/android/repository/platform-tools-latest-linux.zip")
