@@ -20,7 +20,7 @@ def download(link): #taken from my older project
                 sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50-done)) )    
                 sys.stdout.flush()
 
-if (os.name == "nt"):
+if (os.name == "nt"): #Windows code
     download("https://dl.google.com/android/repository/platform-tools-latest-windows.zip")
     print("\nUnzipping...")
     with zipfile.ZipFile("platform-tools.zip", 'r') as zip_ref:
@@ -30,7 +30,9 @@ if (os.name == "nt"):
     os.remove("platform-tools.zip")
     os.system('set Path=%Path%;C:\\platform-tools')
     print("\nSuccessful! Now you can open cmd anywhere and use adb/fastboot commands.")
-elif (os.name == "posix"):
+    
+    
+elif (os.name == "posix"): # Linux code (by dumpy)
     download("https://dl.google.com/android/repository/platform-tools-latest-linux.zip")
     print("\nUnzipping...")
     with zipfile.ZipFile("platform-tools.zip", 'r') as zip_ref:
