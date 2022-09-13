@@ -94,7 +94,7 @@ elif (os.name == "posix"): # Linux code (by dumpy), and ngl why is linux so comp
         else:
             print("User is not in plugdev group, adding... (SUDO required)")
             os.system(r'sudo usermod -a -G plugdev $USER')
-            logoutrequired = true
+            logoutrequired = True
             print("Done!")
         print("Adding udev rules...")
         print("Plug your device in now...")
