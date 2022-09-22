@@ -40,8 +40,6 @@ if (os.name == "nt"): #Windows code
     os.remove("platform-tools.zip")
     os.system('set Path=%Path%;C:\\platform-tools')
     print("All done! You can now use adb/fastboot commands anywhere!")  
-
-    
 elif (os.name == "posix"): # Linux code (by dumpy), and ngl why is linux so complicated
     path = "$PATH"
     logoutrequired = False
@@ -55,35 +53,36 @@ elif (os.name == "posix"): # Linux code (by dumpy), and ngl why is linux so comp
         shell = os.readlink('/proc/%d/exe' % os.getppid())
         print("Detected Shell: " + shell[shell.rfind('/')+1:])
         if (shell.endswith("bash")):
-            with open(expanduser("~") + "/.bashrc", "r") as f:
+            with open(expanduser("~") + "~/.bashrc", "r") as f:
                 # Check if already added
                 if (f.read().find("platform-tools") == -1):
-                    with open(expanduser("~") + "/.bashrc", "a") as f:
-                        f.write("export PATH=$PATH:~/platform-tools")
+                    with open(expanduser("~") + "~/.bashrc", "a") as f:
+                        f.write(r"export PATH=$PATH:~/platform-tools")
                     os.system(r'source ~/.bashrc')
                     print("Done!")
                 else:
                     print("Already added!")
         elif (shell.endswith("zsh")):
-            with open(expanduser("~") + "/.zshrc", "r") as f:
+            with open(expanduser("~") + "~/.zshrc", "r") as f:
                 # Check if already added
                 if (f.read().find("platform-tools") == -1):
                     print("Adding to zshrc...")
                     with open(expanduser("~") + "/.zshrc", "a") as f:
-                        f.write(r'export PATH:$PATH:~/platform-tools')
+                        f.write(r'export PATH="$PATH:~/platform-tools"')
                     os.system(r'source ~/.zshrc')
                     print("Done!")
                 else:
                     print("Already added!")
         elif (shell.endswith("fish")):
-            if (f.read().find("platform-tools") == -1):
-                    print("Adding to config.fish...")
-                    with open(expanduser("~") + "/.config/fish/config.fish", "a") as f:
-                        f.write("set PATH $PATH ~/platform-tools")
-                    os.system(r'source ~/.config/fish/config.fish')
-                    print("Done!")
-            else:
-                print("Already added!")
+            with open(expanduser("~") + "~/.config/fish/config.fish", "r") as f:
+                if (f.read().find("platform-tools") == -1):
+                        print("Adding to config.fish...")
+                        with open(expanduser("~") + "/.config/fish/config.fish", "a") as f:
+                            f.write("set PATH $PATH ~/platform-tools")
+                        os.system(r'source ~/.config/fish/config.fish')
+                        print("Done!")
+                else:
+                    print("Already added!")
         print("Adding executeable permissions...")
         os.system(r'chmod +x ~/platform-tools/*')
         print("Done!")
@@ -94,7 +93,7 @@ elif (os.name == "posix"): # Linux code (by dumpy), and ngl why is linux so comp
         else:
             print("User is not in plugdev group, adding... (SUDO required)")
             os.system(r'sudo usermod -a -G plugdev $USER')
-            logoutrequired = true
+            logoutrequired = True
             print("Done!")
         print("Adding udev rules...")
         print("Plug your device in now...")
