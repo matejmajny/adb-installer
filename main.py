@@ -30,7 +30,7 @@ else:
     exit()
  
 
-if (os.name == "nt"): #Windows code
+if (os.name == "nt"): #Windows code (by Matt, windows ez)
     download("https://dl.google.com/android/repository/platform-tools-latest-windows.zip")
     print("\nUnzipping...")
     with zipfile.ZipFile("platform-tools.zip", 'r') as zip_ref:
@@ -39,8 +39,11 @@ if (os.name == "nt"): #Windows code
     print("Deleting zip and adding platform-tools to path...")
     os.remove("platform-tools.zip")
     os.system('set Path=%Path%;C:\\platform-tools')
-    print("All done! You can now use adb/fastboot commands anywhere!")  
-elif (os.name == "posix"): # Linux code (by dumpy), and ngl why is linux so complicated
+    print("All done! You can now use adb/fastboot commands anywhere!")
+    input("Press ENTER to exit")
+
+    
+elif (os.name == "posix"): # Linux code (by dumpy), and ngl why is linux so complicated  <------(also he loves PRs)
     path = "$PATH"
     logoutrequired = False
     download("https://dl.google.com/android/repository/platform-tools-latest-linux.zip")
@@ -123,5 +126,8 @@ elif (os.name == "posix"): # Linux code (by dumpy), and ngl why is linux so comp
     else:
         print("No logout required!")
     print("All done! You can now use adb/fastboot commands anywhere!")
-else:
+
+    
+else: # OS not supported
     print("Your OS is not supported yet, please open an issue on GitHub")
+    input("Press ENTER to exit.")
