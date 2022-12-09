@@ -1,8 +1,9 @@
-import os
+import os, time
 
 # adds usb device to udev
 if (os.name != 'posix'):
     print("This script only works on Linux")
+    time.sleep(1.5)
     exit()
 else:
     mode = input("Select mode [1] Download generic rules [2] Attempt to detect device: ")
