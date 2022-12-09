@@ -56,17 +56,17 @@ elif (os.name == "posix"): # Linux code (by dumpy), and ngl why is linux so comp
         shell = os.readlink('/proc/%d/exe' % os.getppid())
         print("Detected Shell: " + shell[shell.rfind('/')+1:])
         if (shell.endswith("bash")):
-            with open(expanduser("~") + "~/.bashrc", "r") as f:
+            with open(expanduser("~") + "/.bashrc", "r") as f:
                 # Check if already added
                 if (f.read().find("platform-tools") == -1):
-                    with open(expanduser("~") + "~/.bashrc", "a") as f:
+                    with open(expanduser("~") + "/.bashrc", "a") as f:
                         f.write(r"export PATH=$PATH:~/platform-tools")
                     os.system(r'source ~/.bashrc')
                     print("Done!")
                 else:
                     print("Already added!")
         elif (shell.endswith("zsh")):
-            with open(expanduser("~") + "~/.zshrc", "r") as f:
+            with open(expanduser("~") + "/.zshrc", "r") as f:
                 # Check if already added
                 if (f.read().find("platform-tools") == -1):
                     print("Adding to zshrc...")
@@ -77,7 +77,7 @@ elif (os.name == "posix"): # Linux code (by dumpy), and ngl why is linux so comp
                 else:
                     print("Already added!")
         elif (shell.endswith("fish")):
-            with open(expanduser("~") + "~/.config/fish/config.fish", "r") as f:
+            with open(expanduser("~") + "/.config/fish/config.fish", "r") as f:
                 if (f.read().find("platform-tools") == -1):
                         print("Adding to config.fish...")
                         with open(expanduser("~") + "/.config/fish/config.fish", "a") as f:
@@ -98,17 +98,17 @@ elif (os.name == "posix"): # Linux code (by dumpy), and ngl why is linux so comp
             os.system(r'sudo usermod -a -G plugdev $USER')
             logoutrequired = True
             print("Done!")
-        print("Adding udev rules...")
-        print("Plug your device in now...")
-        input("Press any key to continue...")
-        # Get ID from lsusb
-        id = os.popen(r'lsusb | grep -i android | cut -d " " -f 6').read()
-        print("Device found! ID: " + id)
-        # Get vendor and product ID
-        vendor = id[:4]
-        product = id[5:9]
-        # Write udev rules
-        os.system('sudo echo SUBSYSTEM=="usb", ATTR{idVendor}=="{}", ATTR{idProduct}=="{}", MODE="0666", GROUP="plugdev" > /etc/udev/rules.d/51-android.rules'.format(vendor, product))
+        # print("Adding udev rules...")
+        # print("Plug your device in now...")
+        # input("Press any key to continue...")
+        # # Get ID from lsusb
+        # id = os.popen(r'lsusb | grep -i android | cut -d " " -f 6').read()
+        # print("Device found! ID: " + id)
+        # # Get vendor and product ID
+        # vendor = id[:4]
+        # product = id[5:9]
+        # # Write udev rules
+        # os.system('sudo echo SUBSYSTEM=="usb", ATTR{idVendor}=="{}", ATTR{idProduct}=="{}", MODE="0666", GROUP="plugdev" > /etc/udev/rules.d/51-android.rules'.format(vendor, product))
 
         print("Done!")
         print("Reloading udev rules...")
