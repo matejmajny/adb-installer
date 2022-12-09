@@ -32,7 +32,7 @@ buttonInstall.pack(pady=12, padx=10)
 buttonUdev = customtkinter.CTkButton(frame, text="Install Linux UDev!", command=run.udev)
 buttonUdev.pack(pady=12, padx=10)
 
-requiremensButton = customtkinter.CTkButton(frame, text="Install requirements!", command=run.udev)
+requiremensButton = customtkinter.CTkButton(frame, text="Install requirements!", command=run.requirements)
 requiremensButton.pack(pady=12, padx=10)
 
 bottomlabel = customtkinter.CTkLabel(frame, text="Thanks dumpydev for Unix script.\n GUI and Windows by matejmajny", font=("Segoe UI", 13))
