@@ -22,14 +22,6 @@ def download(link): #taken from my older project
                 sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50-done)) )    
                 sys.stdout.flush()
 
-def start():
-    tos = input("\nWith pressing ENTER you agree with Android SDK Platform-Tools terms of service. (anything else = no)\n")
-    if tos == "":
-        main()
-    else:
-        exit()
-
-start()
 
 def main():
     if (os.name == "nt"): #Windows code (by Matt, windows ez)
@@ -133,3 +125,12 @@ def main():
     else: # OS not supported
         print("Your OS is not supported yet, please open an issue on GitHub")
         input("Press ENTER to exit.")
+
+def start():
+    tos = input("\nWith pressing ENTER you agree with Android SDK Platform-Tools terms of service. (anything else = no)\n")
+    if tos == "":
+        main()
+    else:
+        exit()
+
+start()

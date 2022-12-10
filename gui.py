@@ -10,7 +10,7 @@ class run():
         linuxudev()
 
     def requirements():
-        os.system("pip install requests")
+        os.system("pip install requests, zipfile")
 
 
 os.system('cls' if os.name == 'nt' else 'clear')
