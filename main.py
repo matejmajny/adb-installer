@@ -32,7 +32,7 @@ def main():
 
         print("Deleting zip and adding platform-tools to path...")
         os.remove("platform-tools.zip")
-        os.system('set Path=%Path%;C:\\platform-tools')
+        os.system('setx /m Path=%Path%;C:\\platform-tools')
         print("All done! You can now use adb/fastboot commands anywhere!")
         input("Press ENTER to exit")
 
