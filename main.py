@@ -1,17 +1,16 @@
 from posixpath import expanduser
-import requests, os, zipfile, sys, time
-import winreg
-import ctypes
+import requests, os, zipfile, sys, time, winreg, ctypes
+# Thanks to @flandolf for more like half of this script lmao
 
-# Check if the script is running with administrative privileges
+print("Android Platform Tools Installer v2.5")
+print("By: @matejmajny and @flandolf")
+print("OS: " + sys.platform + "/" + os.name)
+
 def is_admin():
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
         return False
-print("Android Platform Tools Installer v2.5")
-print("By: @matejmajny and @flandolf")
-print("OS: " + sys.platform + "/" + os.name)
 
 def download(link): #taken from my older project
     with open("platform-tools.zip", "wb") as f:
@@ -74,8 +73,12 @@ def main():
 
             # Close the registry key
             winreg.CloseKey(key)
+            
+            # Exit messages
             print("All done! You can now use adb/fastboot commands anywhere!")
+            print("Do not forget to restart CMD/PowerShell or in some cases whole PC.")
             input("Press ENTER to exit")
+            exit()
         
     elif (os.name == "posix"): # Linux code (by dumpy), and ngl why is linux so complicated  <------(also he loves PRs)
         path = "$PATH"
@@ -132,18 +135,7 @@ def main():
                 os.system(r'sudo usermod -a -G plugdev $USER')
                 logoutrequired = True
                 print("Done!")
-            # print("Adding udev rules...")
-            # print("Plug your device in now...")
-            # input("Press any key to continue...")
-            # # Get ID from lsusb
-            # id = os.popen(r'lsusb | grep -i android | cut -d " " -f 6').read()
-            # print("Device found! ID: " + id)
-            # # Get vendor and product ID
-            # vendor = id[:4]
-            # product = id[5:9]
-            # # Write udev rules
-            # os.system('sudo echo SUBSYSTEM=="usb", ATTR{idVendor}=="{}", ATTR{idProduct}=="{}", MODE="0666", GROUP="plugdev" > /etc/udev/rules.d/51-android.rules'.format(vendor, product))
-
+            
             print("Done!")
             print("Reloading udev rules...")
             os.system('sudo udevadm control --reload-rules')
@@ -165,6 +157,7 @@ def main():
     else: # OS not supported
         print("Your OS is not supported yet, please open an issue on GitHub")
         input("Press ENTER to exit.")
+        exit()
 
 def start():
     tos = input("\nWith pressing ENTER you agree with Android SDK Platform-Tools terms of service. (anything else = no)\n")
