@@ -1,7 +1,16 @@
 from posixpath import expanduser
 import requests, os, zipfile, sys, time
-print("Android Platform Tools Installer v2.2")
-print("By: @matejmajny and @dumpydev")
+import winreg
+import ctypes
+
+# Check if the script is running with administrative privileges
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+print("Android Platform Tools Installer v2.5")
+print("By: @matejmajny and @flandolf")
 print("OS: " + sys.platform + "/" + os.name)
 
 def download(link): #taken from my older project
@@ -24,19 +33,49 @@ def download(link): #taken from my older project
 
 
 def main():
-    if (os.name == "nt"): #Windows code (by Matt, windows ez)
-        download("https://dl.google.com/android/repository/platform-tools-latest-windows.zip")
-        print("\nUnzipping...")
-        with zipfile.ZipFile("platform-tools.zip", 'r') as zip_ref:
-            zip_ref.extractall("C:\\")
+    if (os.name == "nt"): # Windows code (by Matt & Andy)
+        if not is_admin():
+            # Re-run the script with administrative privileges using the 'runas' verb
+            print("Admin privileges required, re-running script as admin...")
+            ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+            exit(0)
+            
+        else:
+            # Check if adb is already installed
+            if (os.path.exists("C:\\platform-tools")):
+                print("Platform tools already installed, deleting...")
+                os.system("rmdir /s /q C:\\platform-tools")
+                print("Reinstalling...")
 
-        print("Deleting zip and adding platform-tools to path...")
-        os.remove("platform-tools.zip")
-        #os.system('setx /m Path=%Path%;C:\\platform-tools')
-        print("Automatic path setting has been temporarily removed because it truncates user path into 1024 characters")
-        print("All done! You can now use adb/fastboot commands anywhere!")
-        input("Press ENTER to exit")
+            download("https://dl.google.com/android/repository/platform-tools-latest-windows.zip")
+            print("\nUnzipping...")
+            with zipfile.ZipFile("platform-tools.zip", 'r') as zip_ref:
+                zip_ref.extractall("C:\\")
 
+            print("Deleting zip and adding platform-tools to path...")
+            os.remove("platform-tools.zip")
+
+
+            # Define the path to modify the PATH environment variable in the registry
+            path_to_modify = r"SYSTEM\CurrentControlSet\Control\Session Manager\Environment"
+
+            # Open the registry key for the path to modify
+            key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, path_to_modify, 0, winreg.KEY_ALL_ACCESS)
+
+            # Read the current value of the PATH environment variable
+            current_path = winreg.QueryValueEx(key, "Path")[0]
+
+            # Modify the PATH environment variable by appending a new path to it
+            new_path = "C:\\platform-tools"
+            modified_path = current_path + ";" + new_path
+
+            # Write the modified PATH environment variable back to the registry
+            winreg.SetValueEx(key, "Path", 0, winreg.REG_EXPAND_SZ, modified_path)
+
+            # Close the registry key
+            winreg.CloseKey(key)
+            print("All done! You can now use adb/fastboot commands anywhere!")
+            input("Press ENTER to exit")
         
     elif (os.name == "posix"): # Linux code (by dumpy), and ngl why is linux so complicated  <------(also he loves PRs)
         path = "$PATH"
@@ -135,3 +174,4 @@ def start():
         exit()
 
 start()
+exit(0)
